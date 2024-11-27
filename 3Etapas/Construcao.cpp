@@ -42,15 +42,15 @@ Solution Construcao(const Solution& s, const std::vector<std::vector<double>> ma
     std::vector<std::pair<int, std::pair<int, int>>> alpha; //dúvida: o item de cl sera alocado em um lugar aleatorio de vParcial? ou onde tiver o melhor custo
 
     int quantidade = static_cast<size_t>(std::ceil(s.sequencia.size() * 0.4));
-    // pensei que começar com cerca de 40% a 50% dos vertices seria um bom inicio 
+    // pensei que começar com cerca de 40% a 50% dos vertices seria um bom inicio para numeros menores, poderia mudar para 20% dependendo do tamanho
     
     vParcial = selecionarAleatorios(s.sequencia, quantidade);
     //vetorParcial.valorObj = calcularCustoObj(vetorPacial.sequencia, matrizAdj);
 
-    for (int i : s.sequencia) {
+    for (int i : s.sequencia){
         bool encontrado = false;
         
-        for (int j : vParcial) {
+        for (int j : vParcial){
             if (i == j) {
                 encontrado = true;
                 break; 
@@ -66,22 +66,36 @@ Solution Construcao(const Solution& s, const std::vector<std::vector<double>> ma
 
     while (!CL.empty()) {
         std::uniform_int_distribution<> dist(0, CL.size() - 1);
-        int randomIndexCL = dist(gen);
-        int escolhidoCL = CL[randomIndexCL];
-        CL.erase(CL.begin() + randomIndexCL);
+        int randomIndexCL = dist(gen); // a funcao dist faz com que todos os numeros tenham a mesma chance de serem escolhidos
+        int escolhidoCL = CL[randomIndexCL]; // gera um indice aleatorio
+        
+        CL.erase(CL.begin() + randomIndexCL); // retira o elemento alocado no indice determinado de CL
 
-        std::uniform_int_distribution<> distInsert(0, vParcial.size());
-        int randomPosition = distInsert(gen);
-        vParcial.insert(vParcial.begin() + randomPosition, escolhidoCL);
+        
+        std::uniform_int_distribution<> distInsert(0, vParcial.size()); // o mesmo uso da implementacao anterior
+        int randomPosition = distInsert(gen); //gera uma posicao aleatoria para o numero previamente escolhido ser inserido
+        
+        vParcial.insert(vParcial.begin() + randomPosition, escolhidoCL); 
 
-        int i = (randomPosition == 0) ? -1 : vParcial[randomPosition - 1]; 
-        int j = (randomPosition == vParcial.size() - 1) ? -1 : vParcial[randomPosition + 1]; 
 
-        // Adicionar ao vetor alpha
-        alpha.push_back({escolhidoCL, {i, j}});
-    }
+        int antecessor; // encontrando o par que se conecta com o numero novo
+        if (randomPosition == 0) 
+            antecessor = vParcial[vParcial.size() - 1];
+         else 
+            antecessor = vParcial[randomPosition - 1];
+        
+        int sucessor;
+        if (randomPosition == vParcial.size() - 1) 
+            sucessor = vParcial[0]; 
+        else 
+            sucessor = vParcial[randomPosition + 1];
+  
 
+        alpha.push_back({escolhidoCL, {antecessor, sucessor}});
+        }
 }
+
+
 
 int main() {
     // Matriz de adjacência
