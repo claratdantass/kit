@@ -9,48 +9,94 @@ typedef struct Solution {
     double valorObj;
 } Solution;
 
-std::vector<int> selecionarAleatorios(const std::vector<int>& vetor, int quantidade) {
+typedef struct InsertionInfo
+{
+    int noInserido; // nó k a ser inserido
+    int arestaRemovida; // aresta {i,j} na qual o nó k será inserido
+    double custo; // delta ao inserir k na aresta {i,j}
+} InsertionInfo;
+
+std::vector<int> selecionar3NosAleatorios(const std::vector<int>& vetor){
     std::vector<int> sParcial;
     
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::sample(vetor.begin(), vetor.end(), std::back_inserter(sParcial), quantidade, gen);
+    std::sample(vetor.begin(), vetor.end(), std::back_inserter(sParcial), 3, gen);
 
     return sParcial;
 }
 
-double calcularCustoObj(Solution s, const std::vector<std::vector<double>> matrizAdj) {
-    s.valorObj = 0.0;
+std::vector<InsertionInfo> ordenarEmOrdemCrescente(std::vector<InsertionInfo>& beta) {
+    for (int i = 0; i < beta.size() - 1; ++i) {
+        for (int j = i + 1; j < beta.size(); ++j) {
+            if (beta[i].custo > beta[j].custo)
+                std::swap(beta[i], beta[j]);
+        }
+    }
+    
+    return beta;
+}
 
-    for (int a = 0; a < s.sequencia.size() - 1; ++a) {
-        int i = s.sequencia[a];
-        int j = s.sequencia[a + 1];
-        s.valorObj += matrizAdj[i][j];
+std::vector<InsertionInfo> calcularCustoInsercao(Solution& m, std::vector<int>& CL, const std::vector<std::vector<double>>& matrizAdj){
+
+    std::vector<InsertionInfo> custoInsercao = std::vector<InsertionInfo>(
+        (m.sequencia.size() - 1) * CL.size());
+    int l = 0;
+    for (int a = 0; a < m.sequencia.size() - 1; a++) {
+        int i = m.sequencia[a];
+        int j = m.sequencia[a + 1];
+        for (auto k : CL) {
+            custoInsercao[l].custo = matrizAdj[i][k] + matrizAdj[j][k] - matrizAdj[i][j];
+            custoInsercao[l].noInserido = k;
+            custoInsercao[l].arestaRemovida = a;
+            l++;
+        }
+    }
+    return custoInsercao;
+}
+
+std::vector<int> inserirNaSolucao(Solution& sParcial, const std::vector<InsertionInfo>& custoInsercao, int selecionado) {
+    int noAdicionado = custoInsercao[selecionado].noInserido;
+    int arestaRetirada = custoInsercao[selecionado].arestaRemovida;
+
+    std::vector<int> novaSequencia;
+
+    for (int i = 0; i < sParcial.sequencia.size(); ++i) {
+        novaSequencia.push_back(sParcial.sequencia[i]);
+        if (i == arestaRetirada) {
+            novaSequencia.push_back(noAdicionado);
+        }
+    }
+
+    return novaSequencia;
+}
+
+double calculaValorTotal(Solution& sParcial, const std::vector<std::vector<double>>& matrizAdj){
+    sParcial.valorObj = 0.0;
+    
+    for (int a = 0; a < sParcial.sequencia.size() - 1; ++a) {
+        int i = sParcial.sequencia[a];
+        int j = sParcial.sequencia[a + 1];
+        sParcial.valorObj += matrizAdj[i][j];
     }
     // fiquei com duvida se esse if era realmente necessário, mas ele seria funcional para checar se o trajeto esta começando e terminando no mesmo ponto
-    if (s.sequencia.back() != s.sequencia.front()) {
-        s.valorObj += matrizAdj[s.sequencia.back()][s.sequencia.front()];
+    if (sParcial.sequencia[0] != sParcial.sequencia[sParcial.sequencia.size() - 1]) {
+        sParcial.valorObj += matrizAdj[sParcial.sequencia[0]][sParcial.sequencia[sParcial.sequencia.size() - 1]];
     }
 
-    return s.valorObj;
+    return sParcial.valorObj;
 }
 
 Solution Construcao(const Solution& s, const std::vector<std::vector<double>> matrizAdj){
+    Solution vParcial;
     std::vector<int> CL;
-    std::vector<int> vParcial;
-    double cParcial;
-    std::vector<std::pair<int, std::pair<int, int>>> alpha; //dúvida: o item de cl sera alocado em um lugar aleatorio de vParcial? ou onde tiver o melhor custo
-
-    int quantidade = static_cast<size_t>(std::ceil(s.sequencia.size() * 0.4));
-    // pensei que começar com cerca de 40% a 50% dos vertices seria um bom inicio para numeros menores, poderia mudar para 20% dependendo do tamanho
     
-    vParcial = selecionarAleatorios(s.sequencia, quantidade);
-    //vetorParcial.valorObj = calcularCustoObj(vetorPacial.sequencia, matrizAdj);
-
-    for (int i : s.sequencia){
+    vParcial.sequencia = selecionar3NosAleatorios(s.sequencia);
+    
+    for(int i : s.sequencia){
         bool encontrado = false;
         
-        for (int j : vParcial){
+        for(int j : vParcial.sequencia){
             if (i == j) {
                 encontrado = true;
                 break; 
@@ -60,39 +106,19 @@ Solution Construcao(const Solution& s, const std::vector<std::vector<double>> ma
             CL.push_back(i); 
     }
 
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    //double custoAtual = s.valorObj;
-
     while (!CL.empty()) {
-        std::uniform_int_distribution<> dist(0, CL.size() - 1);
-        int randomIndexCL = dist(gen); // a funcao dist faz com que todos os numeros tenham a mesma chance de serem escolhidos
-        int escolhidoCL = CL[randomIndexCL]; // gera um indice aleatorio
+        std::vector<InsertionInfo> custoInsercao = calcularCustoInsercao(vParcial, CL, matrizAdj);
         
-        CL.erase(CL.begin() + randomIndexCL); // retira o elemento alocado no indice determinado de CL
-
+        std::vector<InsertionInfo> omega = ordenarEmOrdemCrescente(custoInsercao);
         
-        std::uniform_int_distribution<> distInsert(0, vParcial.size()); // o mesmo uso da implementacao anterior
-        int randomPosition = distInsert(gen); //gera uma posicao aleatoria para o numero previamente escolhido ser inserido
+        double alpha = (double)rand() / RAND_MAX; 
+        int selecionado = rand() % ((int)ceil(alpha * custoInsercao.size())); 
         
-        vParcial.insert(vParcial.begin() + randomPosition, escolhidoCL); 
+        vParcial.sequencia = inserirNaSolucao(vParcial, custoInsercao, selecionado);
+        vParcial.valorObj = calculaValorTotal(vParcial, matrizAdj);
+}
 
-
-        int antecessor; // encontrando o par que se conecta com o numero novo
-        if (randomPosition == 0) 
-            antecessor = vParcial[vParcial.size() - 1];
-         else 
-            antecessor = vParcial[randomPosition - 1];
-        
-        int sucessor;
-        if (randomPosition == vParcial.size() - 1) 
-            sucessor = vParcial[0]; 
-        else 
-            sucessor = vParcial[randomPosition + 1];
-  
-
-        alpha.push_back({escolhidoCL, {antecessor, sucessor}});
-        }
+return vParcial;
 }
 
 
@@ -107,22 +133,4 @@ int main() {
         {59, 186, 169, 105, 0, 85},
         {129, 147, 114, 185, 85, 0}
     };
-    Solution s;
-    s.sequencia = {1, 2, 3, 4, 5, 6}; // Todos os vértices
-    s.valorObj = 0;
-
-    //auto alpha = Construcao(s, matrizAdj);
-
-    /*std::cout << "Pares gerados em alpha:" << std::endl;
-    for (const auto& par : alpha) {
-        int k = par.first;
-        int i = par.second.first;
-        int j = par.second.second;
-        std::cout << "k: " << k << ", i: " << i << ", j: " << j << std::endl;
-    }
-
-*/
-   printf("Oi\n");
-
-    return 0;
 }
