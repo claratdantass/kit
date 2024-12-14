@@ -18,28 +18,25 @@ void exibirSolucao(Solution *s)
 //ex: ./tsp instances/teste.tsp
 
 int main(int argc, char *argv[]) {
-
     if(argc < 2){
-        cout << "Passe caminho para a instancia" << endl;
+        std::cout << "Passe caminho para a instancia" << std::endl;
         exit(0);
     }
+    {
+        auto data = Data(argc, argv[1]);  // Cria o objeto
+        data.read();
+
+        const int cidades = data.getDimension();
+        std::cout << cidades << std::endl;
+        
+        Solution Parcial;
+        Parcial = Construcao(cidades, data);
+
+        for (int i : Parcial.sequencia){
+            std::cout << i << " ";
+        }
+    }  
     
-    auto data = Data(argc, argv[1]);
-    data.read();
-
-
-    const int cidades = data.getDimension();
-    cout << cidades << endl;
-    
-    Solution Parcial;
-    Parcial = Construcao(cidades, data);
-
-    for (int i : Parcial.sequencia){
-    std::cout << i << " ";
-    }
-
-    std::cout << "Oi" << std::endl;
-
+    return 0;
 }
-
 
