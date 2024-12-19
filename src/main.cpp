@@ -35,6 +35,7 @@ int main(int argc, char *argv[]) {
         for (int i : Parcial.sequencia){
             std::cout << i << " ";
         }
+
     }  
     
     return 0;
