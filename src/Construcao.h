@@ -1,3 +1,5 @@
+#ifndef CONSTRUCAO_H
+#define CONSTRUCAO_H
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -5,25 +7,28 @@
 #include <cmath>
 #include "Data.h"
 
-typedef struct Solution {
+struct Solution {
     std::vector<int> sequencia;
     double valorObj;
-} Solution;
+};
 
-typedef struct InsertionInfo{
-    int noInserido; // nó k a ser inserido
-    int arestaRemovida; // aresta {i,j} na qual o nó k será inserido
-    double custo; // delta ao inserir k na aresta {i,j}
-} InsertionInfo;
+struct InsertionInfo {
+    int noInserido;       // Nó a ser inserido
+    int arestaRemovida;   // Aresta {i, j} na qual o nó será inserido
+    double custo;         // Delta ao inserir o nó na aresta
+};
 
 std::vector<int> selecionar3NosAleatorios(const std::vector<int>& vetor);
 
 std::vector<InsertionInfo> ordenarEmOrdemCrescente(std::vector<InsertionInfo>& beta);
 
-std::vector<InsertionInfo> calcularCustoInsercao(Solution& s, std::vector<int>& CL, Data data);
+std::vector<InsertionInfo> calcularCustoInsercao(Solution& s, std::vector<int>& CL, Data& data);
 
 std::vector<int> inserirNaSolucao(Solution& sParcial, const std::vector<InsertionInfo>& custoInsercao, int selecionado);
 
-double calculaValorTotal(Solution& sParcial, Data &data);
+double calculaValorTotal(Solution& sParcial, Data& data);
 
-Solution Construcao(const int cidades,Data &data);
+Solution Construcao(int cidades, Data& data, Solution& Parcial);
+
+#endif 
+

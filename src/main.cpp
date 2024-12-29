@@ -2,7 +2,7 @@
 #include <iostream>
 #include <vector>
 #include "Construcao.h"
-
+#include "BuscaLocal.h"
 using namespace std;
 
 double calcularCusto(Data& data, vector<int>& v);
@@ -28,16 +28,20 @@ int main(int argc, char *argv[]) {
 
         const int cidades = data.getDimension();
         std::cout << cidades << std::endl;
-        
-        Solution Parcial;
-        Parcial = Construcao(cidades, data);
 
-        for (int i : Parcial.sequencia){
+        Solution Parcial;
+        Parcial = Construcao(cidades, data, Parcial);
+        Solution best = Parcial;
+
+        for(int i : Parcial.sequencia){
             std::cout << i << " ";
         }
 
+        BuscaLocal(Parcial, data);
+        if(Parcial.valorObj < best.valorObj){
+            best = Parcial; 
+        }
     }  
-    
     return 0;
 }
 

@@ -3,13 +3,18 @@
 #include <iostream>
 using namespace std;
 
-std::vector<int> selecionar3NosAleatorios(const std::vector<int>& vetor) {
-    std::cout << "Iniciando seleção de 3 nós aleatórios" << std::endl;
+std::vector<int> selecionar3NosAleatorios(const std::vector<int>& vetor){
+    std::cout << "Iniciando seleção de 3 nós aleatórios com mistura significativa" << std::endl;
+    std::vector<int> vetorEmbaralhado = vetor; 
     std::vector<int> sParcial;
-    
+
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::sample(vetor.begin(), vetor.end(), std::back_inserter(sParcial), 3, gen);
+
+    std::shuffle(vetorEmbaralhado.begin(), vetorEmbaralhado.end(), gen);
+    for (int i = 0; i < 3 && i < vetorEmbaralhado.size(); ++i) {
+        sParcial.push_back(vetorEmbaralhado[i]);
+    }
 
     std::cout << "Nós selecionados: ";
     for (int no : sParcial) std::cout << no << " ";
@@ -34,7 +39,7 @@ std::vector<InsertionInfo> ordenarEmOrdemCrescente(std::vector<InsertionInfo>& b
     return beta;
 }
 
-std::vector<InsertionInfo> calcularCustoInsercao(Solution& s, std::vector<int>& CL, Data data){
+std::vector<InsertionInfo> calcularCustoInsercao(Solution& s, std::vector<int>& CL, Data& data){
     std::cout << "Iniciando cálculo de custo de inserção" << std::endl;
     std::vector<InsertionInfo> custoInsercao = std::vector<InsertionInfo>((s.sequencia.size() - 1) * CL.size());
     
@@ -42,17 +47,15 @@ std::vector<InsertionInfo> calcularCustoInsercao(Solution& s, std::vector<int>& 
     for(int a = 0; a < s.sequencia.size() - 1; a++){
         int i = s.sequencia[a];
         int j = s.sequencia[a + 1];
-        for (auto k : CL) {
-            custoInsercao[l].custo = data.getDistance(i, k) + data.getDistance(j, k) - data.getDistance(i, j);
+        for (auto k : CL){
+            custoInsercao[l].custo = data.getDistance(i, k) + data.getDistance(k, j) - data.getDistance(i, j);
             custoInsercao[l].noInserido = k;
             custoInsercao[l].arestaRemovida = a;
             l++;
         }
     }
-
     std::cout << "Custo de inserção calculado" << std::endl;
     return custoInsercao;
-    
 }
 
 std::vector<int> inserirNaSolucao(Solution& sParcial, const std::vector<InsertionInfo>& custoInsercao, int selecionado){
@@ -74,7 +77,7 @@ std::vector<int> inserirNaSolucao(Solution& sParcial, const std::vector<Insertio
     return novaSequencia;
 }
 
-double calculaValorTotal(Solution& sParcial, Data& data) {
+double calculaValorTotal(Solution& sParcial, Data& data){
     std::cout << "Calculando valor total da solução" << std::endl;
     sParcial.valorObj = 0.0;
     
@@ -92,32 +95,43 @@ double calculaValorTotal(Solution& sParcial, Data& data) {
     return sParcial.valorObj;
 }
 
-Solution Construcao(const int cidades, Data& data){
+Solution Construcao(int cidades, Data& data, Solution& vParcial){
     std::cout << "Iniciando construção da solução" << std::endl;
-    Solution vParcial;
     std::vector<int> CL;
     std::vector<int> s; 
+    std::vector<int> nS;
 
-    for(int i = 1; i <= cidades; ++i) {
+    for(int i = 1; i <= cidades; ++i){
         s.push_back(i);
     }
+
+    for(int i = 0; i < s.size(); ++i){
+        if(s[i] != 1)
+            nS.push_back(s[i]);
+    }
     
-    vParcial.sequencia = selecionar3NosAleatorios(s);    
-    
+
+    vParcial.sequencia = selecionar3NosAleatorios(nS);    
     s.push_back(s[0]);
     
     std::cout << "Cidades: ";
     for(int ciclo : s) std::cout << ciclo << " ";
     std::cout << std::endl;
 
+    std::cout << "Nao ciclada: ";
+    for(int ciclo : nS) std::cout << ciclo << " ";
+    std::cout << std::endl;
+
+    vParcial.sequencia.insert(vParcial.sequencia.begin(), 1); 
+    vParcial.sequencia.push_back(1); 
+
     std::cout << "Sequência inicial: ";
     for (int no : vParcial.sequencia) std::cout << no << " ";
     std::cout << std::endl;
 
-    for (int i : s) {
-    if (std::find(vParcial.sequencia.begin(), vParcial.sequencia.end(), i) == vParcial.sequencia.end() &&
-        std::find(CL.begin(), CL.end(), i) == CL.end()) 
-    {
+    for (int i : nS) {
+    if(std::find(vParcial.sequencia.begin(), vParcial.sequencia.end(), i) == vParcial.sequencia.end() &&
+        std::find(CL.begin(), CL.end(), i) == CL.end()){
         CL.push_back(i);
     }
 }
@@ -129,6 +143,13 @@ Solution Construcao(const int cidades, Data& data){
     while(!CL.empty()){
         std::cout << "Iniciando nova iteração do loop!!!!!" << std::endl;
         std::vector<InsertionInfo> custoInsercao = calcularCustoInsercao(vParcial, CL, data);
+    
+        std::cout << "Calculo sem ordenacao: ";
+        for (const auto& info : custoInsercao){ 
+            std::cout << info.custo << " ";     
+        }
+        std::cout << std::endl;
+
         custoInsercao = ordenarEmOrdemCrescente(custoInsercao);
 
         double alpha = (double)rand() / RAND_MAX; 
