@@ -6,13 +6,13 @@
 #include "Data.h"
 #include "Construcao.h"
 
-bool bestImprovementSwap(Solution *s, Data& data);
+bool bestImprovementSwap(Solution& sParcial, Data& data);
 
-bool bestImprovement2Opt(Solution vParcial, Data& data);
+bool bestImprovement2Opt(Solution& sParcial, Data& data);
 
-bool bestImprovementOrOpt(Solution sParcial, int N, Data& data);
+bool bestImprovementOrOpt(Solution& sParcial, int N, Data& data);
 
-void BuscaLocal(Solution vParcial, Data& data);
+void BuscaLocal(Solution& sParcial, Data& data);
 
 
 
