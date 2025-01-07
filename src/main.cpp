@@ -38,6 +38,7 @@ int main(int argc, char *argv[]) {
         }
 
         BuscaLocal(Parcial, data);
+
         if(Parcial.valorObj < best.valorObj){
             best = Parcial; 
         }
