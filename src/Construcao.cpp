@@ -4,7 +4,7 @@
 using namespace std;
 
 std::vector<int> selecionar3NosAleatorios(const std::vector<int>& vetor){
-    std::cout << "Iniciando seleção de 3 nós aleatórios com mistura significativa" << std::endl;
+    //std::cout << "Iniciando seleção de 3 nós aleatórios com mistura significativa" << std::endl;
     std::vector<int> vetorEmbaralhado = vetor; 
     std::vector<int> sParcial;
 
@@ -16,15 +16,15 @@ std::vector<int> selecionar3NosAleatorios(const std::vector<int>& vetor){
         sParcial.push_back(vetorEmbaralhado[i]);
     }
 
-    std::cout << "Nós selecionados: ";
-    for (int no : sParcial) std::cout << no << " ";
-    std::cout << std::endl;
+    //std::cout << "Nós selecionados: ";
+    //for (int no : sParcial) std::cout << no << " ";
+    //std::cout << std::endl;
 
     return sParcial;
 }
 
 std::vector<InsertionInfo> ordenarEmOrdemCrescente(std::vector<InsertionInfo>& beta) {
-    std::cout << "Iniciando ordenação de custos de inserção" << std::endl;
+    //std::cout << "Iniciando ordenação de custos de inserção" << std::endl;
     
     for(int i = 0; i < beta.size() - 1; ++i){
         for(int j = i + 1; j < beta.size(); ++j){
@@ -47,7 +47,7 @@ std::vector<InsertionInfo> calcularCustoInsercao(Solution& s, std::vector<int>& 
     for(int a = 0; a < s.sequencia.size() - 1; a++){
         int i = s.sequencia[a];
         int j = s.sequencia[a + 1];
-        for (auto k : CL){
+        for(auto k : CL){
             custoInsercao[l].custo = data.getDistance(i, k) + data.getDistance(k, j) - data.getDistance(i, j);
             custoInsercao[l].noInserido = k;
             custoInsercao[l].arestaRemovida = a;
@@ -59,7 +59,6 @@ std::vector<InsertionInfo> calcularCustoInsercao(Solution& s, std::vector<int>& 
 }
 
 std::vector<int> inserirNaSolucao(Solution& sParcial, const std::vector<InsertionInfo>& custoInsercao, int selecionado){
-    std::cout << "Inserindo nó na solução" << std::endl;
     int noAdicionado = custoInsercao[selecionado].noInserido;
     int arestaRetirada = custoInsercao[selecionado].arestaRemovida;
     std::vector<int> novaSequencia;
@@ -69,16 +68,11 @@ std::vector<int> inserirNaSolucao(Solution& sParcial, const std::vector<Insertio
         if (i == arestaRetirada)
             novaSequencia.push_back(noAdicionado);
     }
-
-    std::cout << "Nova sequência após inserção: ";
-    for (int no : novaSequencia) std::cout << no << " ";
-    std::cout << std::endl;
-
     return novaSequencia;
 }
 
 double calculaValorTotal(Solution& sParcial, Data& data){
-    std::cout << "Calculando valor total da solução" << std::endl;
+    //std::cout << "Calculando valor total da solução" << std::endl;
     sParcial.valorObj = 0.0;
     
     for(int a = 0; a < sParcial.sequencia.size() - 1; ++a){
@@ -108,19 +102,10 @@ Solution Construcao(int cidades, Data& data, Solution& vParcial){
     for(int i = 0; i < s.size(); ++i){
         if(s[i] != 1)
             nS.push_back(s[i]);
-    }
-    
+    }    
 
     vParcial.sequencia = selecionar3NosAleatorios(nS);    
     s.push_back(s[0]);
-    
-    std::cout << "Cidades: ";
-    for(int ciclo : s) std::cout << ciclo << " ";
-    std::cout << std::endl;
-
-    std::cout << "Nao ciclada: ";
-    for(int ciclo : nS) std::cout << ciclo << " ";
-    std::cout << std::endl;
 
     vParcial.sequencia.insert(vParcial.sequencia.begin(), 1); 
     vParcial.sequencia.push_back(1); 
@@ -136,15 +121,13 @@ Solution Construcao(int cidades, Data& data, Solution& vParcial){
     }
 }
 
-    std::cout << "Lista CL inicial: ";
+    std::cout << "Lista CL: ";
     for(int no : CL) std::cout << no << " ";
     std::cout << std::endl;
 
     while(!CL.empty()){
-        std::cout << "Iniciando nova iteração do loop!!!!!" << std::endl;
         std::vector<InsertionInfo> custoInsercao = calcularCustoInsercao(vParcial, CL, data);
-    
-        std::cout << "Calculo sem ordenacao: ";
+        
         for (const auto& info : custoInsercao){ 
             std::cout << info.custo << " ";     
         }
@@ -152,16 +135,17 @@ Solution Construcao(int cidades, Data& data, Solution& vParcial){
 
         custoInsercao = ordenarEmOrdemCrescente(custoInsercao);
 
-        double alpha = (double)rand() / RAND_MAX; 
+        //double alpha = ((double)rand() / RAND_MAX);
+        double alpha = ((double)rand() / RAND_MAX) * 0.5; 
         int selecionado = rand() % ((int)ceil(alpha * custoInsercao.size()));
-        std::cout << "Nó selecionado para inserção: " << custoInsercao[selecionado].noInserido << std::endl;
+        std::cout << "!!!Nó selecionado para inserção:!!! " << custoInsercao[selecionado].noInserido << std::endl;
 
         vParcial.sequencia = inserirNaSolucao(vParcial, custoInsercao, selecionado);
 
         std::cout << "Sequência após inserção: ";
         for (int no : vParcial.sequencia) std::cout << no << " ";
         std::cout << std::endl;
-
+ 
         for (int no : vParcial.sequencia){
             CL.erase(std::remove(CL.begin(), CL.end(), no), CL.end());
         }
@@ -169,8 +153,13 @@ Solution Construcao(int cidades, Data& data, Solution& vParcial){
         std::cout << "Lista CL após remoção de nós: ";
         for (int no : CL) std::cout << no << " ";
         std::cout << std::endl;
-    }
-
+        
+    
+    }  
+    
+    vParcial.valorObj = calculaValorTotal(vParcial, data); 
     std::cout << "Solução final construída" << std::endl;
+    std::cout << "custo inicial:" << vParcial.valorObj << std::endl;    
+    
     return vParcial;
 }
