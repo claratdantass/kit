@@ -8,18 +8,6 @@ using namespace std;
 
 double calcularCusto(Data& data, vector<int>& v);
 
-void exibirSolucao(Solution *s)
-{
- for(int i = 0; i < s->sequencia.size() - 1; i++)
- std::cout << s->sequencia[i] << " -> ";
- std::cout << s->sequencia.back() << std::endl;
-}
-
-//Comando para executar o codigo: ./tsp instances/"nome_da_instancia".tsp
-//ex: ./tsp instances/teste.tsp
-
-const int maxIter = 50;     
-
 int main(int argc, char *argv[]) {
     if(argc < 2){
         std::cout << "Passe caminho para a instancia" << std::endl;
@@ -32,22 +20,22 @@ int main(int argc, char *argv[]) {
         const int cidades = data.getDimension();
         std::cout << cidades << std::endl;
 
-        Solution Parcial;
         Solution bestOfAll;
-        bestOfAll.valorObj = 0;
+        Solution Parcial;
+        bestOfAll.valorObj = INFINITY;
         int maxIterIls;
+        int maxIter = 50;
+    
+        if(cidades >= 150){
+            maxIterIls = (cidades/2);
+        }else{
+            maxIterIls = cidades;
+        }          
+        std::cout << "maxIterIls: " << maxIterIls << std::endl;
 
-        Parcial = Construcao(cidades, data, Parcial);
-        for(int i = 0; i < Parcial.sequencia.size() ; ++i){
-             std::cout << Parcial.sequencia[i] << " ";
-        }
-        std::cout << std::endl;
-
-        BuscaLocal(Parcial, data);
-
-            /*
         for(int i = 0; i < maxIter; i++){
-            Parcial = Construcao(cidades, data, Parcial);
+            Parcial = Construcao(cidades, data, Parcial); 
+            cout << "CONSTRUCAO"<< endl;
             for(int i = 0; i < Parcial.sequencia.size() - 1; ++i){
                 std::cout << Parcial.sequencia[i] << std::endl;
             }
@@ -56,41 +44,34 @@ int main(int argc, char *argv[]) {
 
             int iterIls = 0;
 
-            int tamanho = Parcial.sequencia.size();
-
-            std::cout << "tamanho: " << tamanho << std::endl;
-                
-            if(tamanho >= 150){
-                maxIterIls = (tamanho/2);
-            }else{
-                maxIterIls = tamanho;
-            }          
-            std::cout << "maxIterIls: " << maxIterIls << std::endl;
-
             while(iterIls <= maxIterIls){
                 BuscaLocal(Parcial, data);
                 
                 if(Parcial.valorObj < best.valorObj){
+                    std::cout << Parcial.valorObj << std::endl;
+                    std::cout << "lalalalalalalala" << std::endl;
                     best = Parcial;
                     iterIls = 0;
-            }
-                Parcial = Perturbacao(Parcial, data);
-                iterIls++;
+                }
+                Parcial = Perturbacao(best, data); // tem que ser o melhor
+                iterIls = iterIls + 1;
+                cout << iterIls << " <= " << maxIterIls << endl;
             }
             if (best.valorObj < bestOfAll.valorObj)
                 bestOfAll = best;
-            
-            */
         }
 
-        /*
-        std::cout << "Melhor valor objetivo: " << bestOfAll.valorObj << std::endl;
-        for(int i = 0; i < bestOfAll.sequencia.size() - 1; ++i){
-            std::cout << bestOfAll.sequencia[i] << std::endl;
+        std::cout << "  " <<std::endl;
+        std::cout << "bestOffAll: " << std::endl;
+        for (int i = 0; i < bestOfAll.sequencia.size(); i++) {
+            std::cout << bestOfAll.sequencia[i] << " ";
         }
-        
-        */        
+        std::cout << std::endl;
+        std::cout << bestOfAll.valorObj << std::endl;
+                       
         return 0;
     }
 
+        
+}
 

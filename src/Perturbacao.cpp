@@ -17,7 +17,11 @@ bool isValidSwap(int index1, int tam1, int index2, int tam2, int tamanho){
 }
 
 //double bridge
-Solution Perturbacao(Solution& sParcial, Data& data){
+Solution Perturbacao(Solution& best, Data& data){
+    Solution sParcial; 
+    sParcial = best;
+    std::cout << " " << std::endl;
+    std::cout << "Iniciando a Perturbacao..." << std::endl;
     std::vector<int> bloco1;
     std::vector<int> bloco2;
     int aleatorio;
@@ -25,6 +29,8 @@ Solution Perturbacao(Solution& sParcial, Data& data){
     int tam1, tam2;
     int index1, index2;
     int tamanho = sParcial.sequencia.size();
+
+    
 
     int minT = 2; 
     int maxT = std::ceil((tamanho - 2)/10.0);

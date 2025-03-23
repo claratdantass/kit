@@ -10,7 +10,11 @@ bool bestImprovementSwap(Solution& sParcial, Data& data);
 
 bool bestImprovement2Opt(Solution& sParcial, Data& data);
 
-bool bestImprovementOrOpt(Solution& sParcial, int N, Data& data);
+bool bestImprovementOrOpt_N1(Solution& sParcial, Data& data);
+
+bool bestImprovementOrOpt_N2(Solution& sParcial, Data& data);
+
+bool bestImprovementOrOpt_N3(Solution& sParcial, Data& data);
 
 void BuscaLocal(Solution& sParcial, Data& data);
 
