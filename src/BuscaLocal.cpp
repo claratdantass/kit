@@ -70,25 +70,26 @@ bool bestImprovementSwap(Solution& sParcial, Data& data){
             }
     }
     if(bestDelta < 0){
+        /*
         std::cout << "bestDelta: " << bestDelta << std::endl;
-        
+
         for (int i = 0; i < sParcial.sequencia.size(); i++) {
             std::cout << sParcial.sequencia[i] << " ";
         }
         std::cout << std::endl;
-
+        */
         valorAntes = calculaValorTotal(sParcial, data);
-
+        /*
         std::cout << "best_i:" << sParcial.sequencia[best_i] << std::endl;
         std::cout << "best_j:" << sParcial.sequencia[best_j] << std::endl;
-
+        */
         std::swap(sParcial.sequencia[best_i], sParcial.sequencia[best_j]);
-        
+        /*
         for (int i = 0; i < sParcial.sequencia.size(); i++) {
             std::cout << sParcial.sequencia[i] << " ";
         }
         std::cout << std::endl;
-        
+        */
         // bool vouf;
         // vouf = funcaoAuxiliar(sParcial, data, valorAntes, bestDelta);
         
@@ -98,7 +99,7 @@ bool bestImprovementSwap(Solution& sParcial, Data& data){
         // std::cout << "Diferentes" << std::endl;
 
         sParcial.valorObj += bestDelta;
-        std::cout << sParcial.valorObj << std::endl;
+        //std::cout << sParcial.valorObj << std::endl;
 
         return true;
     }
@@ -136,26 +137,27 @@ bool bestImprovement2Opt(Solution& sParcial, Data& data){
     }
 
     if (bestDelta < 0) {
+        /*
         std::cout << "bestDelta: " << bestDelta << std::endl;
 
         for (int i = 0; i < sParcial.sequencia.size(); i++) {
             std::cout << sParcial.sequencia[i] << " ";
         }
         std::cout << std::endl;
-
+        */
         valorAntes = calculaValorTotal(sParcial, data);
-
+        /*
         std::cout << "best_i:" << sParcial.sequencia[best_i] << std::endl;
         std::cout << "best_j:" << sParcial.sequencia[best_j] << std::endl;
-
+        */
         //std::swap(sParcial.sequencia[best_i + 1], sParcial.sequencia[best_j]);
         std::reverse(sParcial.sequencia.begin() + best_i, sParcial.sequencia.begin() + best_j + 1); 
-
+        /*
         for (int i = 0; i < sParcial.sequencia.size(); i++) {
             std::cout << sParcial.sequencia[i] << " ";
         }
         std::cout << std::endl;
-
+        */
         // bool vouf;
         // vouf = funcaoAuxiliar(sParcial, data, valorAntes, bestDelta);
         
@@ -165,7 +167,7 @@ bool bestImprovement2Opt(Solution& sParcial, Data& data){
         // std::cout << "Diferentes" << std::endl;
 
         sParcial.valorObj += bestDelta;
-        std::cout << sParcial.valorObj << std::endl;
+        //std::cout << sParcial.valorObj << std::endl;
 
         return true;
     }
@@ -202,18 +204,19 @@ bool bestImprovementN1(Solution& sParcial, Data& data) {
     }
     
     if (bestDelta < 0) {
+        /*
         std::cout << "bestDelta: " << bestDelta << std::endl;
 
         for (int i = 0; i < sParcial.sequencia.size(); i++) {
             std::cout << sParcial.sequencia[i] << " ";
         }
         std::cout << std::endl;
-
+        */
         valorAntes = calculaValorTotal(sParcial, data);
-
+        /*
         std::cout << "best_i:" << sParcial.sequencia[best_i] << std::endl;
         std::cout << "best_j:" << sParcial.sequencia[best_j] << std::endl;
-        
+        */
         int temp_i = sParcial.sequencia[best_i]; 
         sParcial.sequencia.erase(sParcial.sequencia.begin() + best_i);
         
@@ -221,12 +224,12 @@ bool bestImprovementN1(Solution& sParcial, Data& data) {
             best_j -= 1;
         }
         sParcial.sequencia.insert(sParcial.sequencia.begin() + best_j + 1, temp_i);
-        
+        /*
         for (int i = 0; i < sParcial.sequencia.size(); i++) {
             std::cout << sParcial.sequencia[i] << " ";
         }
         std::cout << std::endl;
-
+        */
         // bool vouf;
         // vouf = funcaoAuxiliar(sParcial, data, valorAntes, bestDelta);
         
@@ -237,7 +240,7 @@ bool bestImprovementN1(Solution& sParcial, Data& data) {
 
 
         sParcial.valorObj += bestDelta;
-        std::cout << sParcial.valorObj << std::endl;
+        //std::cout << sParcial.valorObj << std::endl;
 
         return true;
     }
@@ -276,19 +279,20 @@ bool bestImprovementN2(Solution& sParcial, Data& data) {
     }
     
     if (bestDelta < 0) {
+        /*
         std::cout << "bestDelta: " << bestDelta << std::endl;
 
         for (int i = 0; i < sParcial.sequencia.size(); i++) {
             std::cout << sParcial.sequencia[i] << " ";
         }
         std::cout << std::endl;
-
+        */
         valorAntes = calculaValorTotal(sParcial, data);
-
+        /*
         std::cout << "best_i:" << sParcial.sequencia[best_i] << std::endl;
         std::cout << "best_w:" << sParcial.sequencia[best_w] << std::endl;
         std::cout << "best_j:" << sParcial.sequencia[best_j] << std::endl;
-        
+        */
         int temp_i = sParcial.sequencia[best_i]; 
         int temp_w = sParcial.sequencia[best_w];
 
@@ -302,12 +306,12 @@ bool bestImprovementN2(Solution& sParcial, Data& data) {
                     
         sParcial.sequencia.insert(sParcial.sequencia.begin() + best_j + 1, temp_i);
         sParcial.sequencia.insert(sParcial.sequencia.begin() + best_j + 2, temp_w);
-        
+        /*
         for (int i = 0; i < sParcial.sequencia.size(); i++) {
             std::cout << sParcial.sequencia[i] << " ";
         }
         std::cout << std::endl;
-
+        */
         // bool vouf;
         // vouf = funcaoAuxiliar(sParcial, data, valorAntes, bestDelta);
         
@@ -317,7 +321,7 @@ bool bestImprovementN2(Solution& sParcial, Data& data) {
         // std::cout << "Diferentes" << std::endl;
 
         sParcial.valorObj += bestDelta;
-        std::cout << sParcial.valorObj << std::endl;
+        //std::cout << sParcial.valorObj << std::endl;
 
         return true;
     }
@@ -334,6 +338,7 @@ bool bestImprovementN3(Solution& sParcial, Data& data) {
         int vi = sParcial.sequencia[i];
         int vi_next = sParcial.sequencia[i + 1];
         int vi_prev = sParcial.sequencia[i - 1];
+        
         for (int j = i + 3; j < sParcial.sequencia.size() - 1; ++j) {
             int vj = sParcial.sequencia[j];
             int vj_next = sParcial.sequencia[j + 1];
@@ -356,20 +361,21 @@ bool bestImprovementN3(Solution& sParcial, Data& data) {
     }
     
     if(bestDelta < 0) {
+        /*
         std::cout << "bestDelta: " << bestDelta << std::endl;
 
         for (int i = 0; i < sParcial.sequencia.size(); i++) {
             std::cout << sParcial.sequencia[i] << " ";
         }
         std::cout << std::endl;
-
+        */
         valorAntes = calculaValorTotal(sParcial, data);
-
+        /*
         std::cout << "best_i:" << sParcial.sequencia[best_i] << std::endl;
         std::cout << "best_w:" << sParcial.sequencia[best_w] << std::endl;
         std::cout << "best_k:" << sParcial.sequencia[best_k] << std::endl;
         std::cout << "best_j:" << sParcial.sequencia[best_j] << std::endl;
-
+        */
         int temp_i = sParcial.sequencia[best_i]; 
         int temp_w = sParcial.sequencia[best_w];
         int temp_k = sParcial.sequencia[best_k];
@@ -384,12 +390,12 @@ bool bestImprovementN3(Solution& sParcial, Data& data) {
         sParcial.sequencia.insert(sParcial.sequencia.begin() + best_j + 1, temp_i);
         sParcial.sequencia.insert(sParcial.sequencia.begin() + best_j + 2, temp_w);
         sParcial.sequencia.insert(sParcial.sequencia.begin() + best_j + 3, temp_k);
-        
+        /*
         for (int i = 0; i < sParcial.sequencia.size(); i++) {
             std::cout << sParcial.sequencia[i] << " ";
         }
         std::cout << std::endl;
-
+        */
         // bool vouf;
         // vouf = funcaoAuxiliar(sParcial, data, valorAntes, bestDelta);
         
@@ -399,7 +405,7 @@ bool bestImprovementN3(Solution& sParcial, Data& data) {
         // std::cout << "Diferentes" << std::endl;
 
         sParcial.valorObj += bestDelta;
-        std::cout << sParcial.valorObj << std::endl;
+        //std::cout << sParcial.valorObj << std::endl;
         
         return true;
     }
@@ -410,8 +416,6 @@ void BuscaLocal(Solution& sParcial, Data& data){
     std::vector<int> NL = {1, 2, 3, 4, 5};
     bool improved = false;
     
-    std::cout << " " << std::endl;
-    std::cout << "Iniciando busca local..." << std::endl;
     sParcial.valorObj = calculaValorTotal(sParcial, data);
 
     while(!NL.empty()){
@@ -419,28 +423,28 @@ void BuscaLocal(Solution& sParcial, Data& data){
 
         switch (NL[n]){
             case 1:
-                std::cout << " " << std::endl;
-                std::cout << "Swap" << std::endl;
+                //std::cout << " " << std::endl;
+                //std::cout << "Swap" << std::endl;
                 improved = bestImprovementSwap(sParcial, data);
                 break;
             case 2:
-                std::cout << " " << std::endl;
-                std::cout << "2Opt" << std::endl;
+                //std::cout << " " << std::endl;
+                //std::cout << "2Opt" << std::endl;
                 improved = bestImprovement2Opt(sParcial, data);
                 break;
             case 3:
-                std::cout << " " << std::endl;
-                std::cout << "N = 1" << std::endl;
+                //std::cout << " " << std::endl;
+                //std::cout << "N = 1" << std::endl;
                 improved = bestImprovementN1(sParcial, data);
                 break;
             case 4:
-                std::cout << " " << std::endl;
-                std::cout << "N = 2" << std::endl;
+                //std::cout << " " << std::endl;
+                //std::cout << "N = 2" << std::endl;
                 improved = bestImprovementN2(sParcial, data);
                 break;
             case 5:
-                std::cout << " " << std::endl; 
-                std::cout << "N = 3" << std::endl;
+                //std::cout << " " << std::endl; 
+                //std::cout << "N = 3" << std::endl;
                 improved = bestImprovementN3(sParcial, data);
                 break;
         }
@@ -449,10 +453,12 @@ void BuscaLocal(Solution& sParcial, Data& data){
             NL = {1, 2, 3, 4, 5};     
         } else {  
             NL.erase(NL.begin() + n);
+            /*
             for (int i = 0; i < sParcial.sequencia.size(); i++) {
                 std::cout << sParcial.sequencia[i] << " ";
             }
             std::cout << std::endl;
+            */
         }
     }
 }

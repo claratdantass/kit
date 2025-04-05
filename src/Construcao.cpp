@@ -90,7 +90,6 @@ double calculaValorTotal(Solution& sParcial, Data& data){
 }
 
 Solution Construcao(int cidades, Data& data, Solution& vParcial){
-    std::cout << "Iniciando construção da solução" << std::endl;
     std::vector<int> CL;
     std::vector<int> s; 
     std::vector<int> nS;
@@ -142,7 +141,6 @@ Solution Construcao(int cidades, Data& data, Solution& vParcial){
     
     vParcial.valorObj = calculaValorTotal(vParcial, data); 
     // std::cout << "Solução final construída" << std::endl;
-    std::cout << "custo inicial:" << vParcial.valorObj << std::endl;    
     
     return vParcial;
 }

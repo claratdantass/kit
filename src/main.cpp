@@ -31,14 +31,11 @@ int main(int argc, char *argv[]) {
         }else{
             maxIterIls = cidades;
         }          
-        std::cout << "maxIterIls: " << maxIterIls << std::endl;
+        //std::cout << "maxIterIls: " << maxIterIls << std::endl;
 
         for(int i = 0; i < maxIter; i++){
             Parcial = Construcao(cidades, data, Parcial); 
-            cout << "CONSTRUCAO"<< endl;
-            for(int i = 0; i < Parcial.sequencia.size() - 1; ++i){
-                std::cout << Parcial.sequencia[i] << std::endl;
-            }
+            //cout << "CONSTRUCAO"<< endl;
 
             Solution best = Parcial;
 
@@ -48,14 +45,14 @@ int main(int argc, char *argv[]) {
                 BuscaLocal(Parcial, data);
                 
                 if(Parcial.valorObj < best.valorObj){
-                    std::cout << Parcial.valorObj << std::endl;
-                    std::cout << "lalalalalalalala" << std::endl;
+                    //std::cout << Parcial.valorObj << std::endl;
+                    //std::cout << "lalalalalalalala" << std::endl;
                     best = Parcial;
                     iterIls = 0;
                 }
                 Parcial = Perturbacao(best, data); // tem que ser o melhor
                 iterIls = iterIls + 1;
-                cout << iterIls << " <= " << maxIterIls << endl;
+                //cout << iterIls << " <= " << maxIterIls << endl;
             }
             if (best.valorObj < bestOfAll.valorObj)
                 bestOfAll = best;
@@ -63,10 +60,6 @@ int main(int argc, char *argv[]) {
 
         std::cout << "  " <<std::endl;
         std::cout << "bestOffAll: " << std::endl;
-        for (int i = 0; i < bestOfAll.sequencia.size(); i++) {
-            std::cout << bestOfAll.sequencia[i] << " ";
-        }
-        std::cout << std::endl;
         std::cout << bestOfAll.valorObj << std::endl;
                        
         return 0;
