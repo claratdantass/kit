@@ -1,11 +1,15 @@
-/build/ 
-/CMakeFiles/
-/cmake_install.cmake/
-/CMakeCache.txt/
-/CMakeLists.txt/
-/construcao/
-/construcao:Zone.Identifier/
-/makefile/
-/Makefile/
-/CMakeFiles/
+# Pastas de build
+build/
+construcao/
+CMakeFiles/
 
+# Arquivos gerados pelo CMake
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+[Mm]akefile
+
+# Arquivos específicos de plataforma
+*.Zone.Identifier
+
+# NÃO ignore CMakeLists.txt se ele for parte do código-fonte!
