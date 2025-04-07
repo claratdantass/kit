@@ -1,6 +1,7 @@
 #include "Construcao.h"
 #include "Data.h"
 #include <iostream>
+#include <algorithm>
 using namespace std;
 
 std::vector<int> selecionar3NosAleatorios(const std::vector<int>& vetor){
@@ -12,6 +13,7 @@ std::vector<int> selecionar3NosAleatorios(const std::vector<int>& vetor){
     std::mt19937 gen(rd());
 
     std::shuffle(vetorEmbaralhado.begin(), vetorEmbaralhado.end(), gen);
+    
     for (int i = 0; i < 3 && i < vetorEmbaralhado.size(); ++i) {
         sParcial.push_back(vetorEmbaralhado[i]);
     }
@@ -23,21 +25,16 @@ std::vector<int> selecionar3NosAleatorios(const std::vector<int>& vetor){
     return sParcial;
 }
 
+
 std::vector<InsertionInfo> ordenarEmOrdemCrescente(std::vector<InsertionInfo>& beta) {
-    // std::cout << "Iniciando ordenação de custos de inserção" << std::endl;
-    
-    for(int i = 0; i < beta.size() - 1; ++i){
-        for(int j = i + 1; j < beta.size(); ++j){
-            if (beta[i].custo > beta[j].custo)
-                std::swap(beta[i], beta[j]);
-        }
-    }
-    
-    // std::cout << "Custos ordenados: ";
-    // for (const auto& info : beta) std::cout << info.custo << " ";
-    // std::cout << std::endl;
-    return beta;
+    std::sort(beta.begin(), beta.end(), [](const InsertionInfo& a, const InsertionInfo& b) {
+        return a.custo < b.custo; 
+    });
+
+    return beta; 
 }
+
+
 
 std::vector<InsertionInfo> calcularCustoInsercao(Solution& s, std::vector<int>& CL, Data& data){
     // std::cout << "Iniciando cálculo de custo de inserção" << std::endl;
@@ -127,6 +124,7 @@ Solution Construcao(int cidades, Data& data, Solution& vParcial){
     while(!CL.empty()){
         std::vector<InsertionInfo> custoInsercao = calcularCustoInsercao(vParcial, CL, data);
         custoInsercao = ordenarEmOrdemCrescente(custoInsercao);
+        //std::sort(custoInsercao.begin(), custoInsercao.end());
 
         double alpha = ((double)rand() / RAND_MAX) * 0.5; 
         int selecionado = rand() % ((int)ceil(alpha * custoInsercao.size()));

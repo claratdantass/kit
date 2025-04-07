@@ -4,6 +4,7 @@
 #include "Construcao.h"
 #include "BuscaLocal.h"
 #include "Perturbacao.h"
+#include <chrono>
 using namespace std;
 
 double calcularCusto(Data& data, vector<int>& v);
@@ -17,6 +18,7 @@ int main(int argc, char *argv[]) {
         auto data = Data(argc, argv[1]);  // Cria o objeto
         data.read();
 
+        auto start = std::chrono::high_resolution_clock::now();
         const int cidades = data.getDimension();
         std::cout << cidades << std::endl;
 
@@ -61,7 +63,15 @@ int main(int argc, char *argv[]) {
         std::cout << "  " <<std::endl;
         std::cout << "bestOffAll: " << std::endl;
         std::cout << bestOfAll.valorObj << std::endl;
-                       
+
+        auto end = std::chrono::high_resolution_clock::now();
+
+        // Calcula a duração do código
+        std::chrono::duration<double> duration = end - start;
+
+        // Imprime o tempo em segundos
+        std::cout << duration.count() << " segundos" << std::endl;
+                        
         return 0;
     }
 
