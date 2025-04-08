@@ -34,8 +34,6 @@ std::vector<InsertionInfo> ordenarEmOrdemCrescente(std::vector<InsertionInfo>& b
     return beta; 
 }
 
-
-
 std::vector<InsertionInfo> calcularCustoInsercao(Solution& s, std::vector<int>& CL, Data& data){
     // std::cout << "Iniciando cálculo de custo de inserção" << std::endl;
     std::vector<InsertionInfo> custoInsercao = std::vector<InsertionInfo>((s.sequencia.size() - 1) * CL.size());
