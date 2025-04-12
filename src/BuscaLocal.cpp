@@ -179,14 +179,20 @@ bool bestImprovementN1(Solution& sParcial, Data& data) {
     int best_i, best_j;
     int valorAntes;
     
-    for (int i = 1; i < sParcial.sequencia.size() - 1; ++i) {
+    for(int i = 1; i < sParcial.sequencia.size() - 1; ++i) {
         int vi = sParcial.sequencia[i];
         int vi_next = sParcial.sequencia[i + 1];
         int vi_prev = sParcial.sequencia[i - 1];
         
-        for (int j = i + 1; j < sParcial.sequencia.size() - 1; ++j) {
+        for (int j = 0; j < sParcial.sequencia.size() - 1; ++j) {
+            if(j == (i - 1))
+                j += 2;
+            
             int vj = sParcial.sequencia[j];
             int vj_next = sParcial.sequencia[j + 1];
+            
+            if(j >= sParcial.sequencia.size() - 1)
+                continue;
             
             delta = - data.getDistance(vi, vi_prev) 
                     - data.getDistance(vi, vi_next) 
@@ -252,14 +258,20 @@ bool bestImprovementN2(Solution& sParcial, Data& data) {
     int best_i, best_j, best_w;
     int valorAntes;
     
-    for (int i = 1; i < sParcial.sequencia.size() - 1; ++i) {
+    for(int i = 1; i < sParcial.sequencia.size() - 2; ++i) {
         int vi = sParcial.sequencia[i];
         int vi_next = sParcial.sequencia[i + 1];
         int vi_prev = sParcial.sequencia[i - 1];
         
-        for (int j = i + 2; j < sParcial.sequencia.size() - 1; ++j) {
+        for (int j = 0; j < sParcial.sequencia.size() - 1; ++j) {
+            if(j == (i - 1))
+                j += 3;
+            
             int vj = sParcial.sequencia[j];
             int vj_next = sParcial.sequencia[j + 1];
+            
+            if(j >= sParcial.sequencia.size() - 1)
+                continue;
             
             delta = - data.getDistance(vi_prev, vi) 
                         - data.getDistance(vi_next, sParcial.sequencia[i + 2])
@@ -328,20 +340,25 @@ bool bestImprovementN2(Solution& sParcial, Data& data) {
     return false;
 }
 
-
 bool bestImprovementN3(Solution& sParcial, Data& data) {
     double bestDelta = 0, delta = 0;
     int best_i, best_j, best_w, best_k;
     int valorAntes;
 
-    for (int i = 1; i < sParcial.sequencia.size() - 1; ++i) {
+    for(int i = 1; i < sParcial.sequencia.size() - 3; ++i) {
         int vi = sParcial.sequencia[i];
         int vi_next = sParcial.sequencia[i + 1];
         int vi_prev = sParcial.sequencia[i - 1];
         
-        for (int j = i + 3; j < sParcial.sequencia.size() - 1; ++j) {
+        for (int j = 0; j < sParcial.sequencia.size() - 1; ++j) {
+            if(j == (i - 1))
+                j += 4;
+            
             int vj = sParcial.sequencia[j];
             int vj_next = sParcial.sequencia[j + 1];
+            
+            if(j >= sParcial.sequencia.size() - 1)
+                continue;
             
             delta = - data.getDistance(vi_prev, vi)   
                         - data.getDistance(sParcial.sequencia[i + 2], sParcial.sequencia[i + 3])

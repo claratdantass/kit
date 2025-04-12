@@ -60,9 +60,10 @@ int main(int argc, char *argv[]) {
                 bestOfAll = best;
         }
 
+        //nome da instância:
         std::cout << "  " <<std::endl;
-        std::cout << "bestOffAll: " << std::endl;
-        std::cout << bestOfAll.valorObj << std::endl;
+        //std::cout << "bestOffAll: " << std::endl;
+        std::cout << "melhor custo:" << bestOfAll.valorObj << std::endl;
 
         auto end = std::chrono::high_resolution_clock::now();
 
@@ -70,11 +71,14 @@ int main(int argc, char *argv[]) {
         std::chrono::duration<double> duration = end - start;
 
         // Imprime o tempo em segundos
-        std::cout << duration.count() << " segundos" << std::endl;
+        std::cout << "tempo: " << duration.count() << std::endl;
                         
         return 0;
     }
 
         
 }
-
+//linhp318
+//linhp318
+//pr299
+//rat195
